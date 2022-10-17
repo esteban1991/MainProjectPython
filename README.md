@@ -1,7 +1,7 @@
 # MainProjectPython
 
 This Project is a Core Base to develop a web application.
-Integrates many companies (users)
+Integrates many companies (users). 
 Allows dynamic configuration and display a dashboard with its main kpis.
 
 ## API (BACKEND)
