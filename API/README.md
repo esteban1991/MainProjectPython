@@ -1,7 +1,6 @@
 # CORE - API
 
-This project was created with [Django](https://www.djangoproject.com/) and implements a [Graphql](https://graphql.org/)
-API .
+This project was created with [Django](https://www.djangoproject.com/) and implements a [Graphql](https://graphql.org/) API.
 
 ## Installation
 
