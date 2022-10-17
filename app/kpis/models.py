@@ -1,7 +1,7 @@
 from django.utils import timezone
 
 from djongo import models
-from users.models import CustomUser
+from app.users.models import CustomUser
 
 
 
