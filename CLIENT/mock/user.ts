@@ -16,9 +16,9 @@ async function getFakeCaptcha(req: Request, res: Response) {
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
 
 /**
- * The permissions of the current user, if it is empty, it means not logged in
+ * 当前用户的权限，如果为空代表没登录
  * current user access， if is '', user need login
- * If it is a preview of pro, it has permission by default
+ * 如果是 pro 的预览，默认是有权限的
  */
 let access = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site' ? 'admin' : '';
 
@@ -26,7 +26,7 @@ const getAccess = () => {
   return access;
 };
 
-// The code will be compatible with local service mocks and static data of the deployment site
+// 代码中会兼容本地 service mock 以及部署站点的静态数据
 export default {
   // 支持值为 Object 和 Array
   'GET /api/currentUser': (req: Request, res: Response) => {
@@ -48,7 +48,7 @@ export default {
         avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
         userid: '00000001',
         email: 'antdesign@alipay.com',
-        signature: 'Be tolerant to diversity, tolerance is a virtue',
+        signature: '海纳百川，有容乃大',
         title: '交互专家',
         group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
         tags: [
