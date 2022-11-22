@@ -2,8 +2,11 @@ import { gql } from '@apollo/client';
 
 // Login mutation
 export const LOGIN = gql`
-  mutation tokenAuth($input: UsersPermissionsLoginInput!) {
-    tokenAuth(input: $input) {
+mutation Login(
+  $password: String!
+  $username: String
+  ){
+    login(password: $password, username:$username) {
       success,
       errors,
       token,
@@ -11,10 +14,11 @@ export const LOGIN = gql`
       unarchiving,
       user {
         id,
-        username
+        username,
+        email,
       }
     }
-  }
+}
 `;
 
 // Create a new record

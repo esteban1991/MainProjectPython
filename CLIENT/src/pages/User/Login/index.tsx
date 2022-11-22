@@ -66,29 +66,7 @@ const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
 
-
-  const LOGIN_MUTATION = gql`
-  mutation {
-    tokenAuth(
-      # username or email
-      username: "jesus"
-      password: "jesus"
-    ) {
-      success,
-      errors,
-      token,
-      refreshToken,
-      unarchiving,
-      user {
-        id,
-        username
-      }
-    }
-  }
-`;
-
-
-  const [loginUser] = useMutation(LOGIN_MUTATION);
+  const [loginUser] = useMutation(LOGIN);
 
   // if (!initialState || !initialState.settings) {
   //   return null;
@@ -139,10 +117,8 @@ const Login: React.FC = () => {
       // Login
       const { data, errors } = await loginUser({
         variables: {
-          input: {
-            username: values.username,
-            password: values.password,
-          },
+          password:values.password,
+          username:values.username,
         },
       });
 
@@ -160,7 +136,9 @@ const Login: React.FC = () => {
         //localStorage.setItem('role-type', data.login.user.role.type);
         console.info('Data has been saved in localstorage !');
         console.info('You are on :', location.pathname);
-        history.push('/');
+        //history.push('/');
+        const urlParams = new URL(window.location.href).searchParams;
+        history.push(urlParams.get('redirect') || '/');
         console.info('After push, you are on :', location.pathname);
         return;
       } else {
@@ -203,7 +181,7 @@ const Login: React.FC = () => {
             <TwitterOutlined key="TwitterOutlined" className={styles.icon} />,
             <InstagramOutlined key="InstagramOutlined" className={styles.icon} />,
           ]}
-          onFinish={async (values) => {
+          onFinish={async (values: API.LoginParams) => {
             await handleSubmit(values as API.LoginParams);
           }}
         >
