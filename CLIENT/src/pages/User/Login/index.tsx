@@ -1,6 +1,8 @@
 import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
+import { PageContainer, Settings as LayoutSettings } from '@ant-design/pro-components';
+import defaultSettings from '../config/defaultSettings';
 import {
   AlipayCircleOutlined,
   LockOutlined,
@@ -8,6 +10,9 @@ import {
   TaobaoCircleOutlined,
   UserOutlined,
   WeiboCircleOutlined,
+  FacebookOutlined,
+  TwitterOutlined,
+  InstagramOutlined,
 } from '@ant-design/icons';
 import {
   LoginForm,
@@ -16,10 +21,16 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { FormattedMessage, history, SelectLang, useIntl, useModel } from '@umijs/max';
-import { Alert, message, Tabs } from 'antd';
+import { Alert, message, Space, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
 import styles from './index.less';
+
+// Import GraphQL LOGIN mutation
+import { LOGIN } from '@/graphql/mutation'; // <- Do not forget to import inside brackets {}
+
+// Import useMutation hook from Apollo Client
+import { gql, useMutation } from '@apollo/client';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -36,10 +47,60 @@ const LoginMessage: React.FC<{
   );
 };
 
+
+/**
+ * This method will jump to the location of the redirect parameter
+ */
+ const goto = () => {
+  if (!history) return;
+  setTimeout(() => {
+    const { query } = history.location;
+    const { redirect } = query as { redirect: string };
+    history.push(redirect || '/');
+  }, 10);
+};
+
 const Login: React.FC = () => {
+  const [submitting, setSubmitting] = useState(false);
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
+
+
+  const LOGIN_MUTATION = gql`
+  mutation {
+    tokenAuth(
+      # username or email
+      username: "jesus"
+      password: "jesus"
+    ) {
+      success,
+      errors,
+      token,
+      refreshToken,
+      unarchiving,
+      user {
+        id,
+        username
+      }
+    }
+  }
+`;
+
+
+  const [loginUser] = useMutation(LOGIN_MUTATION);
+
+  // if (!initialState || !initialState.settings) {
+  //   return null;
+  // }
+
+  // const { navTheme, layout } = initialState.settings;
+  // let className = styles.dark;
+
+  // if ((navTheme === 'realDark' && layout === 'top') || layout === 'mix') {
+  //   className =  `${styles.dark}`;
+  //   //console.log(navTheme)
+  // }
 
   const intl = useIntl();
 
@@ -56,27 +117,61 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (values: API.LoginParams) => {
+    setSubmitting(true);
     try {
-      // 登录
-      const msg = await login({ ...values, type });
-      if (msg.status === 'ok') {
-        const defaultLoginSuccessMessage = intl.formatMessage({
-          id: 'pages.login.success',
-          defaultMessage: '登录成功！',
-        });
-        message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
+      // Iniciar sesión
+      // const msg = await login({ ...values, type });
+      // if (msg.status === 'ok') {
+      //   const defaultLoginSuccessMessage = intl.formatMessage({
+      //     id: 'pages.login.success',
+      //     defaultMessage: '¡Inicio de sesión correcto!',
+      //   });
+      //   message.success(defaultLoginSuccessMessage);
+      //   await fetchUserInfo();
+      //   const urlParams = new URL(window.location.href).searchParams;
+      //   history.push(urlParams.get('redirect') || '/');
+      //   return;
+      // }
+      // console.log(msg);
+
+      localStorage.clear();
+
+      // Login
+      const { data, errors } = await loginUser({
+        variables: {
+          input: {
+            username: values.username,
+            password: values.password,
+          },
+        },
+      });
+
+      // Store data to local storage unless an error occurs
+      if (!errors) {
+        localStorage.setItem('token', data.login.token);
+        localStorage.setItem('id', data.login.user.id);
+        localStorage.setItem('username', data.login.user.username);
+        localStorage.setItem('email', data.login.user.email);
+        localStorage.setItem('confirmed', data.login.user.confirmed);
+        //localStorage.setItem('blocked', data.login.user.blocked);
+        //localStorage.setItem('role-id', data.login.user.role.id);
+        //localStorage.setItem('role-name', data.login.user.role.name);
+        //localStorage.setItem('role-description', data.login.user.role.description);
+        //localStorage.setItem('role-type', data.login.user.role.type);
+        console.info('Data has been saved in localstorage !');
+        console.info('You are on :', location.pathname);
+        history.push('/');
+        console.info('After push, you are on :', location.pathname);
         return;
+      } else {
+        console.error('An Apollo client error happened :', errors);
       }
-      console.log(msg);
-      // 如果失败去设置用户错误信息
+      // Si falla, establezca el mensaje de error del usuario
       setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
-        defaultMessage: '登录失败，请重试！',
+        defaultMessage: 'Acceso fallido. Por favor intente nuevamente！',
       });
       console.log(error);
       message.error(defaultLoginFailureMessage);
@@ -85,6 +180,7 @@ const Login: React.FC = () => {
   const { status, type: loginType } = userLoginState;
 
   return (
+    //  <PageContainer>
     <div className={styles.container}>
       <div className={styles.lang} data-lang>
         {SelectLang && <SelectLang />}
@@ -101,11 +197,11 @@ const Login: React.FC = () => {
             <FormattedMessage
               key="loginWith"
               id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
+              defaultMessage="Otros métodos de inicio de sesión"
             />,
-            <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-            <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-            <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
+            <FacebookOutlined key="FacebookOutlined" className={styles.icon} />,
+            <TwitterOutlined key="TwitterOutlined" className={styles.icon} />,
+            <InstagramOutlined key="InstagramOutlined" className={styles.icon} />,
           ]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
@@ -120,14 +216,14 @@ const Login: React.FC = () => {
                 key: 'account',
                 label: intl.formatMessage({
                   id: 'pages.login.accountLogin.tab',
-                  defaultMessage: '账户密码登录',
+                  defaultMessage: 'Inicio de sesión de contraseña de cuenta',
                 }),
               },
               {
                 key: 'mobile',
                 label: intl.formatMessage({
                   id: 'pages.login.phoneLogin.tab',
-                  defaultMessage: '手机号登录',
+                  defaultMessage: 'Inicio de sesión de número de móvil',
                 }),
               },
             ]}
@@ -137,7 +233,7 @@ const Login: React.FC = () => {
             <LoginMessage
               content={intl.formatMessage({
                 id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误(admin/ant.design)',
+                defaultMessage: 'Cuenta o contraseña incorrectas(admin/ant.design)',
               })}
             />
           )}
@@ -151,7 +247,7 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.username.placeholder',
-                  defaultMessage: '用户名: admin or user',
+                  defaultMessage: 'nombre de usuario: admin or user',
                 })}
                 rules={[
                   {
@@ -159,7 +255,7 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.username.required"
-                        defaultMessage="请输入用户名!"
+                        defaultMessage="por favor ingrese el nombre de usuario!"
                       />
                     ),
                   },
@@ -173,7 +269,7 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
+                  defaultMessage: 'clave: ant.design',
                 })}
                 rules={[
                   {
@@ -181,7 +277,7 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.password.required"
-                        defaultMessage="请输入密码！"
+                        defaultMessage="¡Por favor, introduzca su contraseña!"
                       />
                     ),
                   },
@@ -190,7 +286,7 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
+          {status === 'error' && loginType === 'mobile' && <LoginMessage content="Error de código de verificación" />}
           {type === 'mobile' && (
             <>
               <ProFormText
@@ -201,7 +297,7 @@ const Login: React.FC = () => {
                 name="mobile"
                 placeholder={intl.formatMessage({
                   id: 'pages.login.phoneNumber.placeholder',
-                  defaultMessage: '手机号',
+                  defaultMessage: 'Número de teléfono',
                 })}
                 rules={[
                   {
@@ -209,7 +305,7 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.phoneNumber.required"
-                        defaultMessage="请输入手机号！"
+                        defaultMessage="¡Por favor ingrese el número de teléfono!"
                       />
                     ),
                   },
@@ -218,7 +314,7 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.phoneNumber.invalid"
-                        defaultMessage="手机号格式错误！"
+                        defaultMessage="¡Número de teléfono mal formado!"
                       />
                     ),
                   },
@@ -234,18 +330,18 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.captcha.placeholder',
-                  defaultMessage: '请输入验证码',
+                  defaultMessage: 'por favor ingrese el código de verificación',
                 })}
                 captchaTextRender={(timing, count) => {
                   if (timing) {
                     return `${count} ${intl.formatMessage({
                       id: 'pages.getCaptchaSecondText',
-                      defaultMessage: '获取验证码',
+                      defaultMessage: 'obtener código de verificación',
                     })}`;
                   }
                   return intl.formatMessage({
                     id: 'pages.login.phoneLogin.getVerificationCode',
-                    defaultMessage: '获取验证码',
+                    defaultMessage: 'obtener código de verificación',
                   });
                 }}
                 name="captcha"
@@ -255,7 +351,7 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.captcha.required"
-                        defaultMessage="请输入验证码！"
+                        defaultMessage="por favor ingrese el código de verificación!"
                       />
                     ),
                   },
@@ -267,7 +363,7 @@ const Login: React.FC = () => {
                   if (result === false) {
                     return;
                   }
-                  message.success('获取验证码成功！验证码为：1234');
+                  message.success('¡Obtenga el código de verificación con éxito! El código de verificación es: 1234');
                 }}
               />
             </>
@@ -278,20 +374,21 @@ const Login: React.FC = () => {
             }}
           >
             <ProFormCheckbox noStyle name="autoLogin">
-              <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录" />
+              <FormattedMessage id="pages.login.rememberMe" defaultMessage="inicio de sesión automático" />
             </ProFormCheckbox>
             <a
               style={{
                 float: 'right',
               }}
             >
-              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
+              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="Se te olvidó tu contraseña" />
             </a>
           </div>
         </LoginForm>
       </div>
       <Footer />
     </div>
+    //</PageContainer>
   );
 };
 

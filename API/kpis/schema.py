@@ -5,7 +5,7 @@ import graphene
 from graphql import GraphQLError
 
 from .models import Kpi
-from app.users.models import CustomUser
+from users.models import CustomUser
 
 from graphene.types import Scalar
 from graphql.language import ast

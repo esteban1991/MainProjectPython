@@ -1,7 +1,0 @@
-# Local master dependencies go here
-# ------------------------------------------------
--r base.txt
-
-# WSGI Handler
-# ------------------------------------------------
-gunicorn==20.1.0

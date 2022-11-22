@@ -16,9 +16,6 @@ from django.utils.encoding import force_str
 django.utils.encoding.force_text = force_str
 
 
-# import environ
-# env = environ.Env()
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -34,7 +31,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost","127.0.0.1"]
 
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8001",    
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,19 +49,19 @@ INSTALLED_APPS = [
     "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     "graphql_auth",
     "django_filters",
-    'social_django',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",    
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
-
 
 ROOT_URLCONF = "config.urls"
 
@@ -91,14 +90,13 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': os.environ.get('DB_NAME', 'core'),
+        'NAME': 'core',
         'ENFORCE_SCHEMA': False,        
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('DB_PORT', 27017),
-        # 'USER': os.environ.get('DB_USER', 'coreadmin'),
-        # 'PASSWORD': os.environ.get('DB_PASSWORD', 'coreadmin'),        
+        'HOST': '127.0.0.1',
+        'PORT': 27017,
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -110,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
-    
 ]
 
 
@@ -143,9 +140,6 @@ GRAPHENE = {
 AUTHENTICATION_BACKENDS = [
     "graphql_auth.backends.GraphQLAuthBackend",
     "django.contrib.auth.backends.ModelBackend",
-    'social_core.backends.google.GoogleOAuth2',     
-    'social_core.backends.facebook.FacebookOAuth2',      
-    'social_core.backends.twitter.TwitterOAuth',    
 ]
 
 GRAPHQL_JWT = {
@@ -200,64 +194,5 @@ MAIL_ATTACHMENT_IMAGES = []
 # FROM
 FROM_EMAIL = 'gisycu@gmail.com'
 SUPPORT_EMAIL = 'gisycu@gmail.com'
-
-
-SOCIAL_AUTH_PIPELINE = [
-    # Get the information we can about the user and return it in a simple
-    # format to create the user instance later. On some cases the details are
-    # already part of the auth response from the provider, but sometimes this
-    # could hit a provider API.
-    'social_core.pipeline.social_auth.social_details',
-
-    # Get the social uid from whichever service we're authing thru. The uid is
-    # the unique identifier of the given user in the provider.
-    'social_core.pipeline.social_auth.social_uid',
-
-    # Verifies that the current auth process is valid within the current
-    # project, this is where emails and domains whitelists are applied (if
-    # defined).
-    'social_core.pipeline.social_auth.auth_allowed',
-
-    # Checks if the current social-account is already associated in the site.
-    'social_core.pipeline.social_auth.social_user',
-
-    # Make up a username for this person, appends a random string at the end if
-    # there's any collision.
-    'social_core.pipeline.user.get_username',
-
-    # Send a validation email to the user to verify its email address.
-    # Disabled by default.
-    # 'social_core.pipeline.mail.mail_validation',
-
-    # Associates the current social details with another user account with
-    # a similar email address. Disabled by default.
-    # 'social_core.pipeline.social_auth.associate_by_email',
-
-    # Create a user account if we haven't found one yet.
-    'social_core.pipeline.user.create_user',
-
-    # Create the record that associates the social account with the user.
-    'social_core.pipeline.social_auth.associate_user',
-
-    # Populate the extra_data field in the social record with the values
-    # specified by settings (and the default ones like access_token, etc).
-    'social_core.pipeline.social_auth.load_extra_data',
-
-    # Update the user record with any changed info from the auth service.
-    'social_core.pipeline.user.user_details',
-]
-
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY =\
-     env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', default='')
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET =\
-    env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', default='')
-
-SOCIAL_AUTH_FACEBOOK_KEY = env('SOCIAL_AUTH_FACEBOOK_KEY', default='')
-SOCIAL_AUTH_FACEBOOK_SECRET = env('SOCIAL_AUTH_FACEBOOK_SECRET', default='')
-
-SOCIAL_AUTH_TWITTER_KEY = env('SOCIAL_AUTH_TWITTER_KEY', default='')
-SOCIAL_AUTH_TWITTER_SECRET = env('SOCIAL_AUTH_TWITTER_SECRET', default='')
 
 

@@ -9,71 +9,73 @@ const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
   /**
-   * @name 开启 hash 模式
-   * @description 让 build 之后的产物包含 hash 后缀。通常用于增量发布和避免浏览器加载缓存。
+   * @name Habilitar modo hash
+   * @description Haga que el producto después de la compilación contenga el sufijo hash.
+   * Normalmente se utiliza para la publicación incremental y para evitar el almacenamiento en caché de la carga del navegador.
    * @doc https://umijs.org/docs/api/config#hash
    */
   hash: true,
 
   /**
-   * @name 兼容性设置
-   * @description 设置 ie11 不一定完美兼容，需要检查自己使用的所有依赖
+   * @name Configuración de compatibilidad
+   * @description La configuración de ie11 puede no ser perfectamente compatible, debe verificar todas las dependencias que usa
    * @doc https://umijs.org/docs/api/config#targets
    */
   // targets: {
   //   ie: 11,
   // },
   /**
-   * @name 路由的配置，不在路由中引入的文件不会编译
-   * @description 只支持 path，component，routes，redirect，wrappers，title 的配置
+   * @name La configuración de la ruta, los archivos que no se importen en la ruta no se compilarán
+   * @description Solo admite la configuración de ruta, componente, rutas, redirección, envoltorios, título
    * @doc https://umijs.org/docs/guides/routes
    */
   // umi routes: https://umijs.org/docs/routing
   routes,
   /**
-   * @name 主题的配置
-   * @description 虽然叫主题，但是其实只是 less 的变量设置
-   * @doc antd的主题设置 https://ant.design/docs/react/customize-theme-cn
-   * @doc umi 的theme 配置 https://umijs.org/docs/api/config#theme
+   * @name Configuración del tema
+   * @description Aunque se llama tema, en realidad es solo una configuración variable de menos
+   * @doc antd configuración del tema https://ant.design/docs/react/customize-theme-cn
+   * @doc configuración del tema de umi https://umijs.org/docs/api/config#theme
    */
   theme: {
-    // 如果不想要 configProvide 动态设置主题需要把这个设置为 default
-    // 只有设置为 variable， 才能使用 configProvide 动态设置主色调
+    // Si no desea que configProvide configure dinámicamente el tema, debe configurarlo como predeterminado
+    // Solo establecido en variable, puede usar configProvide para establecer dinámicamente el color principal
     'root-entry-name': 'variable',
   },
   /**
-   * @name moment 的国际化配置
-   * @description 如果对国际化没有要求，打开之后能减少js的包大小
+   * @name moment configuración de internacionalización
+   * @description Si no hay requisitos para la internacionalización, el tamaño del paquete de js se puede reducir después de abrir
    * @doc https://umijs.org/docs/api/config#ignoremomentlocale
    */
   ignoreMomentLocale: true,
   /**
-   * @name 代理配置
-   * @description 可以让你的本地服务器代理到你的服务器上，这样你就可以访问服务器的数据了
-   * @see 要注意以下 代理只能在本地开发时使用，build 之后就无法使用了。
-   * @doc 代理介绍 https://umijs.org/docs/guides/proxy
-   * @doc 代理配置 https://umijs.org/docs/api/config#proxy
+   * @name configuración de proxy
+   * @description Permite que su servidor local actúe como proxy de su servidor para que pueda acceder a los datos del servidor
+   * @see Tenga en cuenta que los siguientes proxies solo se pueden usar durante el desarrollo local y no se pueden usar después de la compilación.
+   * @doc Introducción del agente https://umijs.org/docs/guides/proxy
+   * @doc configuración de proxy https://umijs.org/docs/api/config#proxy
    */
   proxy: proxy[REACT_APP_ENV || 'dev'],
   /**
-   * @name 快速热更新配置
-   * @description 一个不错的热更新组件，更新时可以保留 state
+   * @name Configuración rápida de actualización en caliente
+   * @description Un buen componente de actualización en caliente que conserva el estado al actualizar
    */
   fastRefresh: true,
-  //============== 以下都是max的插件配置 ===============
+  //============== La siguiente es la configuración del complemento de max ===============
   /**
-   * @name 数据流插件
+   * @name Complemento de flujo de datos
    * @@doc https://umijs.org/docs/max/data-flow
    */
   model: {},
   /**
-   * 一个全局的初始数据流，可以用它在插件之间共享数据
-   * @description 可以用来存放一些全局的数据，比如用户信息，或者一些全局的状态，全局初始状态在整个 Umi 项目的最开始创建。
+   * Un flujo de datos inicial global que se puede usar para compartir datos entre complementos
+   * @description Se puede usar para almacenar algunos datos globales, como información del usuario,
+   * o algún estado global.El estado inicial global se crea al comienzo de todo el proyecto Umi.
    * @doc https://umijs.org/docs/max/data-flow#%E5%85%A8%E5%B1%80%E5%88%9D%E5%A7%8B%E7%8A%B6%E6%80%81
    */
   initialState: {},
   /**
-   * @name layout 插件
+   * @name layout complemento de diseño
    * @doc https://umijs.org/docs/max/layout-menu
    */
   layout: {
@@ -81,7 +83,7 @@ export default defineConfig({
     ...defaultSettings,
   },
   /**
-   * @name 国际化插件
+   * @name Complemento de internacionalización
    * @doc https://umijs.org/docs/max/i18n
    */
   locale: {

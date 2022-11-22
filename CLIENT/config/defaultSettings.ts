@@ -7,13 +7,13 @@ const Settings: LayoutSettings & {
   pwa?: boolean;
   logo?: string;
 } = {
-  navTheme: 'light',
+  navTheme: 'realDark',
   // 拂晓蓝
-  // colorPrimary: '#1890ff',
-  colorPrimary: '#e432e0',  
+  colorPrimary: '#1890ff',
+  // colorPrimary: '#e432e0',
   layout: 'mix',
   contentWidth: 'Fluid',
-  fixedHeader: false,
+  fixedHeader: true,
   fixSiderbar: true,
   colorWeak: false,
   title: 'Core Client 1.0',
