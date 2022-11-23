@@ -16,4 +16,8 @@ Open the Web browser and go to the URL [http://localhost:8000/graphql/](http://l
 
 This project was created with [AntDesignPro](https://pro.ant.design/) and implements a Client.
 
+Pre-requisites:
+cd.. (MainProject)
+npx husky install
+
 ## Enjoy

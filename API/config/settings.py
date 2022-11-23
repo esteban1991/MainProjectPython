@@ -32,7 +32,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["localhost","127.0.0.1"]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8001",    
+    "http://localhost:8001",  
 ]
 # Application definition
 
@@ -43,13 +43,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "users",
-    "kpis",
     "graphene_django",
     "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     "graphql_auth",
     "django_filters",
     "corsheaders",
+    
+    # internal apps
+    "users",
+    "kpis",    
 ]
 
 MIDDLEWARE = [
@@ -162,6 +164,7 @@ GRAPHQL_JWT = {
 
 GRAPHQL_AUTH = {
     'LOGIN_ALLOWED_FIELDS': ['email', 'username'],
+    'UPDATE_MUTATION_FIELDS': ["first_name", "last_name", "companyname"],    
     'EMAIL_FROM': 'gisycu@gmail.com'
 }
 

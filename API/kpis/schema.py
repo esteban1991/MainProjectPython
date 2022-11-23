@@ -3,12 +3,13 @@ from django.utils import timezone
 from graphene_django import DjangoObjectType
 import graphene
 from graphql import GraphQLError
+from graphene.types import Scalar
+from graphql.language import ast
 
 from .models import Kpi
 from users.models import CustomUser
 
-from graphene.types import Scalar
-from graphql.language import ast
+
 
 
 class KpiType(DjangoObjectType):
@@ -75,15 +76,21 @@ class DeleteKpi(graphene.Mutation):
         return DeleteKpi(msg = "Kpi deleted Successfully")
 
 
-class QueryKpi(graphene.ObjectType):
+class KpiMutation(graphene.ObjectType):
+    create_kpi = CreateKpi.Field()
+    update_kpi = UpdateKpi.Field()
+    delete_kpi = DeleteKpi.Field()
 
+class KpiQuery(graphene.ObjectType):
 
     kpis = graphene.List(KpiType)
     user_kpis = graphene.List(KpiType, user=graphene.Int())
 
+    def resolve_kpis(self, info):
+        return Kpi.objects.all()
+
     def resolve_user_kpis(self, info, user):
         return Kpi.objects.filter(user=user)
 
-    def resolve_kpis(self, info):
-        return Kpi.objects.all()
+
 

@@ -1,6 +1,6 @@
 {
-  "name": "ant-design-pro",
-  "version": "6.0.0-beta.1",
+  "name": "client",
+  "version": "1.0.0",
   "private": true,
   "description": "An out-of-box UI solution for enterprise applications",
   "scripts": {
@@ -19,7 +19,7 @@
     "lint:prettier": "prettier -c --write \"src/**/*\" --end-of-line auto",
     "openapi": "max openapi",
     "playwright": "playwright install && playwright test",
-    "prepare": "husky install",
+    "prepare": "cd .. && husky install client/.husky",
     "prettier": "prettier -c --write \"src/**/*\"",
     "serve": "umi-serve",
     "start": "cross-env PORT=8001 UMI_ENV=dev max dev",
@@ -51,6 +51,7 @@
     "apollo-upload-client": "^17.0.0",
     "classnames": "^2.3.2",
     "graphql": "^15.8.0",
+    "husky": "^8.0.2",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
@@ -82,7 +83,6 @@
     "detect-installer": "^1.0.2",
     "eslint": "^7.32.0",
     "gh-pages": "^3.2.0",
-    "husky": "^7.0.4",
     "lint-staged": "^10.0.0",
     "mockjs": "^1.1.0",
     "prettier": "^2.7.1",
