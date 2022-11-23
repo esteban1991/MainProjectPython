@@ -143,4 +143,7 @@ mutation {
   }
 }
 
+Protected mutations require the http Authorization header.
+Authorization JWT token
+
 ## Enjoy
