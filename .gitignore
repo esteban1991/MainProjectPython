@@ -6,6 +6,7 @@
 **/**.swm
 .vscode
 **/__pycache__/**
+**/migrations/**
 .python-version
 **/ENV/**
 **/env/**
@@ -58,6 +59,7 @@ settings_local.py
 develop-eggs/
 dist/
 downloads/
+migrations/
 eggs/
 .eggs/
 lib/

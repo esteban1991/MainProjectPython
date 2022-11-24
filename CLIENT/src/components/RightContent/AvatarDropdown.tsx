@@ -48,7 +48,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
       const { key } = event;
       if (key === 'logout') {
         flushSync(() => {
-          setInitialState((s) => ({ ...s, currentUser: undefined }));
+          setInitialState((s: any) => ({ ...s, currentUser: undefined }));
           //setInitialState(({ ...initialState, currentUser: undefined }));
         });
         loginOut();
@@ -57,7 +57,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
       }
       history.push(`/account/${key}`);
     },
-    [ setInitialState],
+    [setInitialState],
   );
 
   const loading = (
@@ -104,6 +104,11 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         ]
       : []),
     {
+      key: 'settings',
+      icon: <SettingOutlined />,
+      label: 'Configuraciones',
+    },
+    {
       key: 'logout',
       icon: <LogoutOutlined />,
       label: 'Salir',
@@ -148,7 +153,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
-        <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+        {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" /> */}
+        <Avatar size="medium" style={{ backgroundColor: 'primary' }}>{username.substring(0,1)}</Avatar>
         <span className={`${styles.name} anticon`}>{username}</span>
       </span>
     </HeaderDropdown>
