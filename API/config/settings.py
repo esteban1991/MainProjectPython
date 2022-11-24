@@ -168,7 +168,7 @@ GRAPHQL_JWT = {
 
 GRAPHQL_AUTH = {
     'LOGIN_ALLOWED_FIELDS': ['email', 'username'],
-    'UPDATE_MUTATION_FIELDS': ["first_name", "last_name", "companyname"],    
+    'UPDATE_MUTATION_FIELDS': ["first_name", "last_name", "companyname", "navtheme", "colorprimary"],    
     'EMAIL_FROM': 'gisycu@gmail.com'
 }
 

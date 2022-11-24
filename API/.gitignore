@@ -27,11 +27,11 @@
 ### Django ###
 *.log
 *.pot
-# !**/migrations/**
-# **/migrations/**/**
-# !**/migrations/**/__init__.py
-# *.pyc
-# __pycache__/
+**/migrations/**
+**/migrations/**/**
+**/migrations/**/__init__.py
+*.pyc
+__pycache__/
 local_settings.py
 settings_local.py
 #db.sqlite3
