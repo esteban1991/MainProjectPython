@@ -4,6 +4,8 @@ import graphene
 
 from graphql_auth.schema import UserQuery, MeQuery
 from graphql_auth import mutations
+import graphql_social_auth
+
 
 
 class AuthMutation(graphene.ObjectType):
@@ -29,6 +31,9 @@ class AuthMutation(graphene.ObjectType):
     verify_token = mutations.VerifyToken.Field()
     refresh_token = mutations.RefreshToken.Field()
     revoke_token = mutations.RevokeToken.Field()
+    
+    social_auth = graphql_social_auth.SocialAuth.Field()
+    social_authJWT = graphql_social_auth.SocialAuthJWT.Field()
 
 class AuthQuery(UserQuery, MeQuery, graphene.ObjectType):
     pass

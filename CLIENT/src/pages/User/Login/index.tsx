@@ -13,6 +13,7 @@ import {
   FacebookOutlined,
   TwitterOutlined,
   InstagramOutlined,
+  GoogleOutlined,
 } from '@ant-design/icons';
 import {
   LoginForm,
@@ -128,6 +129,7 @@ const Login: React.FC = () => {
         localStorage.setItem('id', data.login.user.id);
         localStorage.setItem('username', data.login.user.username);
         localStorage.setItem('email', data.login.user.email);
+        localStorage.setItem('company', data.login.user.companyname);
         localStorage.setItem('confirmed', data.login.user.confirmed);
         //localStorage.setItem('blocked', data.login.user.blocked);
         //localStorage.setItem('role-id', data.login.user.role.id);
@@ -177,9 +179,10 @@ const Login: React.FC = () => {
               id="pages.login.loginWith"
               defaultMessage="Otros métodos de inicio de sesión"
             />,
-            <FacebookOutlined key="FacebookOutlined" className={styles.icon} />,
-            <TwitterOutlined key="TwitterOutlined" className={styles.icon} />,
-            <InstagramOutlined key="InstagramOutlined" className={styles.icon} />,
+            
+            <GoogleOutlined key="GoogleOutlined" className={styles.icon} />,
+            // <TwitterOutlined key="TwitterOutlined" className={styles.icon} />,
+            // <InstagramOutlined key="InstagramOutlined" className={styles.icon} />,
           ]}
           onFinish={async (values: API.LoginParams) => {
             await handleSubmit(values as API.LoginParams);

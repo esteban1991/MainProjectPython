@@ -1,5 +1,7 @@
 import { Settings as LayoutSettings } from '@ant-design/pro-components';
 
+
+
 /**
  * @name
  */
@@ -16,9 +18,10 @@ const Settings: LayoutSettings & {
   fixedHeader: true,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Core Client 1.0',
+  title: 'Core Client',
   pwa: false,
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+  logo: '/logoClient.svg',
+  // logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',
 };
 

@@ -16,6 +16,7 @@ mutation Login(
         id,
         username,
         email,
+        companyname
       }
     }
 }

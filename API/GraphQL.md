@@ -33,7 +33,7 @@ mutation {
 }
 
 mutation {
-  tokenAuth(
+  login(
     # username or email
     email: "skywalker@email.com"
     password: "123456super"
@@ -49,6 +49,8 @@ mutation {
     }
   }
 }
+
+google-oauth2
 
 mutation {
   passwordSet(

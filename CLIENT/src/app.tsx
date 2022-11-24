@@ -207,7 +207,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
           {!props.location?.pathname?.includes('/login') && (
             <SettingDrawer
               disableUrlParams
-              enableDarkTheme={true}
+              enableDarkTheme={false}
               settings={initialState?.settings}
               onSettingChange={(settings) => {
                 setInitialState((preInitialState: any) => ({
@@ -220,6 +220,12 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         </>
       );
     },
+     //title : ('/logos/' + localStorage.getItem('username') + '.svg') || 'Core Client' ,
+    title : localStorage.getItem('company') || 'Core Client' ,
+    // logo : '/logos/' + localStorage.getItem('username') + '.svg' ,
+    logo: '/logos/admin.svg',
+
+
     ...initialState?.settings,
   };
 };
