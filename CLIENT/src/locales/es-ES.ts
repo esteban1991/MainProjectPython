@@ -11,7 +11,7 @@ export default {
   'layout.user.link.help': 'Ayuda',
   'layout.user.link.privacy': 'Privacidad',
   'layout.user.link.terms': 'Términos',
-  'app.copyright.produced': 'Producido por Ant Financial Experience Department',
+  'app.copyright.produced': 'Producido por el Equipo QvaLT',
   'app.preview.down.block': 'Descargue esta página para su proyecto local',
   'app.welcome.link.fetch-blocks': 'Obtener todos los bloques',
   'app.welcome.link.block-list': 'Despliegue rapídimos, páginas basadas en desarrollo por `bloques`',

@@ -30,7 +30,7 @@ import { flushSync } from 'react-dom';
 import styles from './index.less';
 
 // Import GraphQL LOGIN mutation
-import { LOGIN , CREATEUSER} from '@/graphql/mutation'; // <- Do not forget to import inside brackets {}
+import { LOGIN , REGISTER} from '@/graphql/mutation'; // <- Do not forget to import inside brackets {}
 
 // Import useMutation hook from Apollo Client
 import { gql, useMutation } from '@apollo/client';
@@ -71,7 +71,7 @@ const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const [loginUser] = useMutation(LOGIN);
-  const [createUser] = useMutation(CREATEUSER);
+  const [registerUser] = useMutation(REGISTER);
 
   // if (!initialState || !initialState.settings) {
   //   return null;
@@ -191,13 +191,13 @@ const Login: React.FC = () => {
       }
   };
 
-  const handleSubmitUser = async (values: API.UserParams) => {
+  const handleSubmitRegister = async (values: API.RegisterParams) => {
     setSubmitting(true);
       try {
 
         // Create User
         //console.log(values)
-        const { data, errors } = await createUser({
+        const { data, errors } = await registerUser({
           variables: {
             email:values.email,
             username:values.username,
@@ -240,13 +240,14 @@ const Login: React.FC = () => {
           initialValues={{
             autoLogin: true,
           }}
-          submitter={type === 'account'?({searchConfig: { submitText: 'Acceder'} }):({searchConfig: { submitText: 'Crear'} })}
+          submitter={type === 'account' ?
+            ({searchConfig: { submitText: intl.formatMessage({ id: 'pages.login.submit' })} }):
+            ({searchConfig: { submitText: intl.formatMessage({ id: 'pages.login.registerAccount' })} })}
           actions= {type === 'account'?([
 
             <FormattedMessage
               key="loginWith"
               id="pages.login.loginWith"
-              defaultMessage="Otros métodos de inicio de sesión"
             />,
             <GoogleOutlined key="GoogleOutlined" className={styles.icon} />,
             // <TwitterOutlined key="TwitterOutlined" className={styles.icon} />,
@@ -283,8 +284,7 @@ const Login: React.FC = () => {
           {status === 'error' && loginType === 'account' && (
             <LoginMessage
               content={intl.formatMessage({
-                id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: 'Cuenta o contraseña incorrectas',
+                id: 'pages.login.accountLogin.errorMessage'
               })}
               type='error'
             />
@@ -299,8 +299,7 @@ const Login: React.FC = () => {
                   prefix: <UserOutlined className={styles.prefixIcon} />,
                 }}
                 placeholder={intl.formatMessage({
-                  id: 'pages.login.username.placeholder',
-                  defaultMessage: 'nombre de usuario:',
+                  id: 'pages.login.username.placeholder'
                 })}
                 rules={[
                   {
@@ -308,7 +307,6 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.username.required"
-                        defaultMessage="por favor ingrese el nombre de usuario!"
                       />
                     ),
                   },
@@ -321,8 +319,7 @@ const Login: React.FC = () => {
                   prefix: <LockOutlined className={styles.prefixIcon} />,
                 }}
                 placeholder={intl.formatMessage({
-                  id: 'pages.login.password.placeholder',
-                  defaultMessage: 'clave',
+                  id: 'pages.login.password.placeholder'
                 })}
                 rules={[
                   {
@@ -330,7 +327,6 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.password.required"
-                        defaultMessage="¡Por favor, introduzca su contraseña!"
                       />
                     ),
                   },
@@ -343,14 +339,14 @@ const Login: React.FC = () => {
                 }}
               >
                 <ProFormCheckbox noStyle name="autoLogin">
-                  <FormattedMessage id="pages.login.rememberMe" defaultMessage="inicio de sesión automático" />
+                  <FormattedMessage id="pages.login.rememberMe" />
                 </ProFormCheckbox>
                 <a
                   style={{
                     float: 'right',
                   }}
                 >
-                  <FormattedMessage id="pages.login.forgotPassword" defaultMessage="Se te olvidó tu contraseña" />
+                  <FormattedMessage id="pages.login.forgotPassword" />
                 </a>
               </div>
             </>
@@ -405,7 +401,6 @@ const Login: React.FC = () => {
                       message: (
                         <FormattedMessage
                           id="pages.login.password.required"
-                          defaultMessage="¡Su contraseña!"
                         />
                       ),
                     },
@@ -422,7 +417,6 @@ const Login: React.FC = () => {
                       message: (
                         <FormattedMessage
                           id="pages.login.password.required"
-                          defaultMessage="¡Su contraseña!"
                         />
                       ),
                     },
@@ -442,7 +436,6 @@ const Login: React.FC = () => {
                 name="mobile"
                 placeholder={intl.formatMessage({
                   id: 'pages.login.phoneNumber.placeholder',
-                  defaultMessage: 'Número de teléfono',
                 })}
                 rules={[
                   {
@@ -450,7 +443,6 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.phoneNumber.required"
-                        defaultMessage="¡Por favor ingrese el número de teléfono!"
                       />
                     ),
                   },
@@ -459,7 +451,6 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.phoneNumber.invalid"
-                        defaultMessage="¡Número de teléfono mal formado!"
                       />
                     ),
                   },
@@ -482,7 +473,6 @@ const Login: React.FC = () => {
                   if (timing) {
                     return `${count} ${intl.formatMessage({
                       id: 'pages.getCaptchaSecondText',
-                      defaultMessage: 'obtener código de verificación',
                     })}`;
                   }
                   return intl.formatMessage({

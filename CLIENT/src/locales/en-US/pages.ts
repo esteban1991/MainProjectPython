@@ -1,7 +1,7 @@
 export default {
   'pages.layouts.userLayout.title':
-    'Ant Design is the most influential web design specification in Xihu district',
-  'pages.login.accountLogin.tab': 'Account Login',
+    'Core Client is an ideal platform for the Business Intelligence of your company... ',
+  'pages.login.accountLogin.tab': 'Login',
   'pages.login.accountLogin.errorMessage': 'Incorrect username/password(admin/ant.design)',
   'pages.login.failure': 'Login failed, please try again!',
   'pages.login.success': 'Login successful!',

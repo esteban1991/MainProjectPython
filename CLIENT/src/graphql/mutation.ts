@@ -22,8 +22,8 @@ mutation Login(
 }
 `;
 
-// Create a new record
-export const CREATEUSER = gql`
+// Register Mutation
+export const REGISTER = gql`
   mutation
     register(
       $email: String!,
