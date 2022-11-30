@@ -1,15 +1,15 @@
 import Footer from '@/components/Footer';
-import { login } from '@/services/ant-design-pro/api';
-import { getFakeCaptcha } from '@/services/ant-design-pro/login';
-import { PageContainer, Settings as LayoutSettings } from '@ant-design/pro-components';
+// import { login } from '@/services/ant-design-pro/api';
+// import { getFakeCaptcha } from '@/services/ant-design-pro/login';
+import { PageContainer, Settings as LayoutSettings,ProForm, ProFormUploadButton, ProFormGroup} from '@ant-design/pro-components';
 import defaultSettings from '../config/defaultSettings';
 import {
-  AlipayCircleOutlined,
+  // AlipayCircleOutlined,
   LockOutlined,
-  MobileOutlined,
-  TaobaoCircleOutlined,
+  // MobileOutlined,
+
   UserOutlined,
-  WeiboCircleOutlined,
+
   FacebookOutlined,
   TwitterOutlined,
   InstagramOutlined,
@@ -21,28 +21,31 @@ import {
   ProFormCheckbox,
   ProFormText,
 } from '@ant-design/pro-components';
+import ImgCrop from 'antd-img-crop';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { FormattedMessage, history, SelectLang, useIntl, useModel } from '@umijs/max';
-import { Alert, message, Space, Tabs } from 'antd';
+import { Alert, Col, message, Row, Upload, Tabs, Space, MessageArgsProps } from 'antd';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
 import styles from './index.less';
 
 // Import GraphQL LOGIN mutation
-import { LOGIN } from '@/graphql/mutation'; // <- Do not forget to import inside brackets {}
+import { LOGIN , CREATEUSER} from '@/graphql/mutation'; // <- Do not forget to import inside brackets {}
 
 // Import useMutation hook from Apollo Client
 import { gql, useMutation } from '@apollo/client';
 
 const LoginMessage: React.FC<{
   content: string;
-}> = ({ content }) => {
+  type:string;
+}> = ({ content ,type}) => {
   return (
     <Alert
       style={{
         marginBottom: 24,
       }}
       message={content}
-      type="error"
+      type={type}
       showIcon
     />
   );
@@ -68,6 +71,7 @@ const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const [loginUser] = useMutation(LOGIN);
+  const [createUser] = useMutation(CREATEUSER);
 
   // if (!initialState || !initialState.settings) {
   //   return null;
@@ -80,6 +84,34 @@ const Login: React.FC = () => {
   //   className =  `${styles.dark}`;
   //   //console.log(navTheme)
   // }
+
+  const [fileList, setFileList] = useState<UploadFile[]>([
+    // {
+    //   uid: '-1',
+    //   name: 'image.png',
+    //   status: 'done',
+    //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    // },
+  ]);
+
+  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as RcFile);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
 
   const intl = useIntl();
 
@@ -95,67 +127,102 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (values: API.LoginParams) => {
+  const handleSubmitLogin = async (values: API.LoginParams) => {
     setSubmitting(true);
-    try {
-      // Iniciar sesión
-      // const msg = await login({ ...values, type });
-      // if (msg.status === 'ok') {
-      //   const defaultLoginSuccessMessage = intl.formatMessage({
-      //     id: 'pages.login.success',
-      //     defaultMessage: '¡Inicio de sesión correcto!',
-      //   });
-      //   message.success(defaultLoginSuccessMessage);
-      //   await fetchUserInfo();
-      //   const urlParams = new URL(window.location.href).searchParams;
-      //   history.push(urlParams.get('redirect') || '/');
-      //   return;
-      // }
-      // console.log(msg);
+      try {
+        // Iniciar sesión
+        // const msg = await login({ ...values, type });
+        // if (msg.status === 'ok') {
+        //   const defaultLoginSuccessMessage = intl.formatMessage({
+        //     id: 'pages.login.success',
+        //     defaultMessage: '¡Inicio de sesión correcto!',
+        //   });
+        //   message.success(defaultLoginSuccessMessage);
+        //   await fetchUserInfo();
+        //   const urlParams = new URL(window.location.href).searchParams;
+        //   history.push(urlParams.get('redirect') || '/');
+        //   return;
+        // }
+        // console.log(msg);
 
-      localStorage.clear();
+        localStorage.clear();
 
-      // Login
-      const { data, errors } = await loginUser({
-        variables: {
-          password:values.password,
-          username:values.username,
-        },
-      });
+        // Login
+        const { data, errors } = await loginUser({
+          variables: {
+            password:values.password,
+            username:values.username,
+          },
+        });
 
-      // Store data to local storage unless an error occurs
-      if (!errors) {
-        localStorage.setItem('token', data.login.token);
-        localStorage.setItem('id', data.login.user.id);
-        localStorage.setItem('username', data.login.user.username);
-        localStorage.setItem('email', data.login.user.email);
-        localStorage.setItem('company', data.login.user.companyname);
-        localStorage.setItem('confirmed', data.login.user.confirmed);
-        //localStorage.setItem('blocked', data.login.user.blocked);
-        //localStorage.setItem('role-id', data.login.user.role.id);
-        //localStorage.setItem('role-name', data.login.user.role.name);
-        //localStorage.setItem('role-description', data.login.user.role.description);
-        //localStorage.setItem('role-type', data.login.user.role.type);
-        console.info('Data has been saved in localstorage !');
-        console.info('You are on :', location.pathname);
-        //history.push('/');
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
-        console.info('After push, you are on :', location.pathname);
-        return;
-      } else {
-        console.error('An Apollo client error happened :', errors);
+        // Store data to local storage unless an error occurs
+        if (!errors) {
+          localStorage.setItem('token', data.login.token);
+          localStorage.setItem('id', data.login.user.id);
+          localStorage.setItem('username', data.login.user.username);
+          localStorage.setItem('email', data.login.user.email);
+          localStorage.setItem('company', data.login.user.companyname);
+          localStorage.setItem('confirmed', data.login.user.confirmed);
+          //localStorage.setItem('blocked', data.login.user.blocked);
+          //localStorage.setItem('role-id', data.login.user.role.id);
+          //localStorage.setItem('role-name', data.login.user.role.name);
+          //localStorage.setItem('role-description', data.login.user.role.description);
+          //localStorage.setItem('role-type', data.login.user.role.type);
+          console.info('Data has been saved in localstorage !');
+          console.info('You are on :', location.pathname);
+          //history.push('/');
+          const urlParams = new URL(window.location.href).searchParams;
+          history.push(urlParams.get('redirect') || '/');
+          console.info('After push, you are on :', location.pathname);
+          return;
+        } else {
+          console.error('An Apollo client error happened :', errors);
+        }
+        // Si falla, establezca el mensaje de error del usuario
+        setUserLoginState(msg);
+        console.log(errors)
+      } catch (error) {
+        const defaultLoginFailureMessage = intl.formatMessage({
+          id: 'pages.login.failure',
+          defaultMessage: 'Acceso fallido. Por favor intente nuevamente！',
+        });
+        console.log(error);
+        message.error(defaultLoginFailureMessage);
       }
-      // Si falla, establezca el mensaje de error del usuario
-      setUserLoginState(msg);
-    } catch (error) {
-      const defaultLoginFailureMessage = intl.formatMessage({
-        id: 'pages.login.failure',
-        defaultMessage: 'Acceso fallido. Por favor intente nuevamente！',
-      });
-      console.log(error);
-      message.error(defaultLoginFailureMessage);
-    }
+  };
+
+  const handleSubmitUser = async (values: API.UserParams) => {
+    setSubmitting(true);
+      try {
+
+        // Create User
+        //console.log(values)
+        const { data, errors } = await createUser({
+          variables: {
+            email:values.email,
+            username:values.username,
+            password1:values.password1,
+            password2:values.password2
+          },
+        });
+
+        // Store data to local storage unless an error occurs
+        if (data.register.success) {
+
+          message.success("Usuario Creado correctamente!");
+          //Limpiar campos
+        } else {
+          message.error("Error al guardar el user");
+          //Me quede aqui, Si falla, establezca el mensaje de error del usuario
+          //setUserLoginState(msg);
+        }
+
+      } catch (error) {
+
+        //console.log(error);
+        message.error("Error salvando datos de usuario");
+      }
+
   };
   const { status, type: loginType } = userLoginState;
 
@@ -173,19 +240,22 @@ const Login: React.FC = () => {
           initialValues={{
             autoLogin: true,
           }}
-          actions={[
+          submitter={type === 'account'?({searchConfig: { submitText: 'Acceder'} }):({searchConfig: { submitText: 'Crear'} })}
+          actions= {type === 'account'?([
+
             <FormattedMessage
               key="loginWith"
               id="pages.login.loginWith"
               defaultMessage="Otros métodos de inicio de sesión"
             />,
-            
             <GoogleOutlined key="GoogleOutlined" className={styles.icon} />,
             // <TwitterOutlined key="TwitterOutlined" className={styles.icon} />,
             // <InstagramOutlined key="InstagramOutlined" className={styles.icon} />,
-          ]}
-          onFinish={async (values: API.LoginParams) => {
-            await handleSubmit(values as API.LoginParams);
+          ]):''}
+          onFinish={type === 'account'?async (values: API.LoginParams) => {
+            await handleSubmitLogin(values as API.LoginParams);
+          }:async (values: API.UserParams) => {
+            await handleSubmitUser(values as API.UserParams);
           }}
         >
           <Tabs
@@ -201,10 +271,10 @@ const Login: React.FC = () => {
                 }),
               },
               {
-                key: 'mobile',
+                key: 'create',
                 label: intl.formatMessage({
                   id: 'pages.login.phoneLogin.tab',
-                  defaultMessage: 'Inicio de sesión de número de móvil',
+                  defaultMessage: 'Crear cuenta',
                 }),
               },
             ]}
@@ -214,10 +284,12 @@ const Login: React.FC = () => {
             <LoginMessage
               content={intl.formatMessage({
                 id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: 'Cuenta o contraseña incorrectas(admin/ant.design)',
+                defaultMessage: 'Cuenta o contraseña incorrectas',
               })}
+              type='error'
             />
           )}
+
           {type === 'account' && (
             <>
               <ProFormText
@@ -228,7 +300,7 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.username.placeholder',
-                  defaultMessage: 'nombre de usuario: admin or user',
+                  defaultMessage: 'nombre de usuario:',
                 })}
                 rules={[
                   {
@@ -250,7 +322,7 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.password.placeholder',
-                  defaultMessage: 'clave: ant.design',
+                  defaultMessage: 'clave',
                 })}
                 rules={[
                   {
@@ -264,15 +336,107 @@ const Login: React.FC = () => {
                   },
                 ]}
               />
+
+              <div
+                style={{
+                  marginBottom: 24,
+                }}
+              >
+                <ProFormCheckbox noStyle name="autoLogin">
+                  <FormattedMessage id="pages.login.rememberMe" defaultMessage="inicio de sesión automático" />
+                </ProFormCheckbox>
+                <a
+                  style={{
+                    float: 'right',
+                  }}
+                >
+                  <FormattedMessage id="pages.login.forgotPassword" defaultMessage="Se te olvidó tu contraseña" />
+                </a>
+              </div>
             </>
+
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="Error de código de verificación" />}
-          {type === 'mobile' && (
+          {status === 'error' && loginType === 'create' && <LoginMessage content="Error de código de verificación" />}
+          {type === 'create' && (
             <>
-              <ProFormText
+              {/* Create account here */}
+              {/* <ProForm> */}
+              <ProForm.Group>
+              <Row>
+                <Col span={8}>
+                <ImgCrop rotate>
+                  <Upload
+                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    listType="picture-card"
+                    fileList={fileList}
+                    onChange={onChange}
+                    onPreview={onPreview}
+                  >
+                    {fileList.length < 1 && '+ Imagen'}
+                  </Upload>
+                </ImgCrop>
+                </Col>
+                <Col span={16}>
+                <ProFormText
+                  width="md"
+                  name="username"
+                  //label="Nombre"
+                  tooltip="Nombre de Usuario"
+                  placeholder="Usuario"
+                />
+                <ProFormText
+                  width="md"
+                  name="email"
+                  //label="company"
+                  tooltip="Correo"
+                  placeholder="Correo"
+                />
+                </Col>
+              </Row>
+              <Row gutter={5}>
+                <Col span={12}>
+                <ProFormText.Password
+                  name="password1"
+                  placeholder="Contraseña"
+                  rules={[
+                    {
+                      required: true,
+                      message: (
+                        <FormattedMessage
+                          id="pages.login.password.required"
+                          defaultMessage="¡Su contraseña!"
+                        />
+                      ),
+                    },
+                  ]}
+                  />
+                </Col>
+                <Col span={12}>
+                <ProFormText.Password
+                  name="password2"
+                  placeholder="Contraseña"
+                  rules={[
+                    {
+                      required: true,
+                      message: (
+                        <FormattedMessage
+                          id="pages.login.password.required"
+                          defaultMessage="¡Su contraseña!"
+                        />
+                      ),
+                    },
+                  ]}
+                  />
+                </Col>
+              </Row>
+              </ProForm.Group>
+
+              {/* </ProForm> */}
+
+              {/* <ProFormText
                 fieldProps={{
-                  size: 'large',
+                  size: 'middle',
                   prefix: <MobileOutlined className={styles.prefixIcon} />,
                 }}
                 name="mobile"
@@ -300,8 +464,9 @@ const Login: React.FC = () => {
                     ),
                   },
                 ]}
-              />
-              <ProFormCaptcha
+              /> */}
+
+              {/* <ProFormCaptcha
                 fieldProps={{
                   size: 'large',
                   prefix: <LockOutlined className={styles.prefixIcon} />,
@@ -346,30 +511,16 @@ const Login: React.FC = () => {
                   }
                   message.success('¡Obtenga el código de verificación con éxito! El código de verificación es: 1234');
                 }}
-              />
+              /> */}
+              {/* Create account here */}
             </>
           )}
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
-            <ProFormCheckbox noStyle name="autoLogin">
-              <FormattedMessage id="pages.login.rememberMe" defaultMessage="inicio de sesión automático" />
-            </ProFormCheckbox>
-            <a
-              style={{
-                float: 'right',
-              }}
-            >
-              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="Se te olvidó tu contraseña" />
-            </a>
-          </div>
+
+
         </LoginForm>
       </div>
       <Footer />
     </div>
-    //</PageContainer>
   );
 };
 

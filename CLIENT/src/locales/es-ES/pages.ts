@@ -1,7 +1,7 @@
 export default {
   'pages.layouts.userLayout.title':
     'Ant Design is the most influential web design specification in Xihu district',
-  'pages.login.accountLogin.tab': 'Cuenta',
+  'pages.login.accountLogin.tab': 'Entrar',
   'pages.login.accountLogin.errorMessage': 'Usuario/contraseña(admin/ant.design)',
   'pages.login.failure': 'Error en Autentificación, por favor, intente de nuevo!',
   'pages.login.success': 'Autentificacion con éxito!',
@@ -9,7 +9,7 @@ export default {
   'pages.login.username.required': 'Por favor entre su usuario!',
   'pages.login.password.placeholder': 'Contraseña: ant.design',
   'pages.login.password.required': 'Por favor, introduzca su contraseña!',
-  'pages.login.phoneLogin.tab': 'Teléfono',
+  'pages.login.phoneLogin.tab': 'Crear Cuenta',
   'pages.login.phoneLogin.errorMessage': 'Código Verificación Erróneo',
   'pages.login.phoneNumber.placeholder': 'Número Teléfono',
   'pages.login.phoneNumber.required': 'Por favor, introduzca su número telefónico!',

@@ -23,26 +23,25 @@ mutation Login(
 `;
 
 // Create a new record
-export const CREATEJUVENTUS = gql`
-  mutation CreateJuventus($input: createJuventusInput) {
-    createJuventus(input: $input) {
-      juventus {
-        id
-        name
-        number
-        age
-        country
-        appearences
-        goals
-        minutesPlayed
-        position
-      }
+export const CREATEUSER = gql`
+  mutation
+    register(
+      $email: String!,
+      $username: String!,
+      $password1: String!,
+      $password2: String!,
+    ) {
+      register(email:$email,username:$username,password1:$password1,password2:$password2){
+      success,
+      errors,
+      token,
+      refreshToken
     }
   }
 `;
 
 // Update a record
-export const UPDATEJUVENTUS = gql`
+export const UPDATEUSER = gql`
   mutation UpdateJuventus($input: updateJuventusInput) {
     updateJuventus(input: $input) {
       juventus {
@@ -86,7 +85,7 @@ export const UPLOADPROFPIC = gql`
 `;
 
 // Delete a record
-export const DELETEJUVENTUS = gql`
+export const DELETEUSER = gql`
   mutation deleteJuventus($input: deleteJuventusInput) {
     deleteJuventus(input: $input) {
       juventus {

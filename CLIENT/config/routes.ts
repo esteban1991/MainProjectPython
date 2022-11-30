@@ -18,6 +18,11 @@ export default [
         path: '/user/login',
         component: './User/Login',
       },
+      {
+        name: 'settings',
+        path: '/user/settings',
+        component: './User/Settings',
+      },
     ],
   },
   {

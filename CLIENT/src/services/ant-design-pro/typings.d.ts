@@ -68,6 +68,13 @@ declare namespace API {
     type?: string;
   };
 
+  type UserParams = {
+    username?: string;
+    password1?: string;
+    password2?: boolean;
+    email?: string;
+  };
+
   type ErrorResponse = {
     /** 业务约定的错误码 */
     errorCode: string;
