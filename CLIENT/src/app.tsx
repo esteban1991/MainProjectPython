@@ -8,7 +8,7 @@ import { history, Link } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 //import { PageLoading } from '@ant-design/pro-layout';
 import { errorConfig } from './requestErrorConfig';
-import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import { currentUser, currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
 import appConfig from './appConfig.json';
 import type { JwtPayload } from 'jwt-decode';
@@ -52,11 +52,12 @@ export async function getInitialState(): Promise<{
       // return currentUser;
 
       const userId = localStorage.getItem('id');
+      const userName = localStorage.getItem('username');
 
       if (userId == null) {
         return undefined;
       } else {
-        let currentUser: API.CurrentUser = { userid: userId };
+        let currentUser: API.CurrentUser = { userid: userId, name: String(userName) };
         return currentUser;
       }
     } catch (error) {
@@ -79,12 +80,17 @@ export async function getInitialState(): Promise<{
   //console.log(Settings)
   return {
     fetchUserInfo,
+    
     settings: defaultSettings,
   };
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
+
+
+
+
   return {
     rightContentRender: () => <RightContent />,
     waterMarkProps: {
@@ -195,10 +201,16 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
           </Link>,
         ]
       : [],
-    menuHeaderRender: undefined,
-    // 自定义 403 页面
-    // unAccessible: <div>unAccessible</div>,
-    // 增加一个 loading 的状态
+
+    title : localStorage.getItem('company') || 'Core Client' ,
+    logo : '/logos/' + localStorage.getItem('username') + '.svg' ,
+    primaryColor: localStorage.getItem('colorprimary') || '#1890ff',
+    navTheme: localStorage.getItem('navtheme') || 'realDark',
+
+    // menuHeaderRender: undefined,
+    // // 自定义 403 页面
+    // // unAccessible: <div>unAccessible</div>,
+    // // 增加一个 loading 的状态
     childrenRender: (children: any, props: { location: { pathname: string | string[]; }; }) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
@@ -207,7 +219,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
           {!props.location?.pathname?.includes('/login') && (
             <SettingDrawer
               disableUrlParams
-              enableDarkTheme={false}
+              // enableDarkTheme={false}
               settings={initialState?.settings}
               onSettingChange={(settings) => {
                 setInitialState((preInitialState: any) => ({
@@ -220,10 +232,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         </>
       );
     },
-     //title : ('/logos/' + localStorage.getItem('username') + '.svg') || 'Core Client' ,
-    title : localStorage.getItem('company') || 'Core Client' ,
-    // logo : '/logos/' + localStorage.getItem('username') + '.svg' ,
-    logo: '/logos/admin.svg',
 
 
     ...initialState?.settings,
@@ -250,7 +258,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      authorization: token ? `JWT ${token}` : '',
     },
   };
 });

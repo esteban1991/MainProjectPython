@@ -20,7 +20,7 @@ const Settings: LayoutSettings & {
   colorWeak: false,
   title: 'Core Client',
   pwa: false,
-  logo: '/logoClient.svg',
+  logo: 'logoClient.svg',
   // logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',
 };

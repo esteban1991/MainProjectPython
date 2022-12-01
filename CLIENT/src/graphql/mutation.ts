@@ -5,8 +5,9 @@ export const LOGIN = gql`
 mutation Login(
   $password: String!
   $username: String
+  $email: String
   ){
-    login(password: $password, username:$username) {
+    login(password: $password, username:$username, email:$email) {
       success,
       errors,
       token,
@@ -16,7 +17,10 @@ mutation Login(
         id,
         username,
         email,
-        companyname
+        companyname,
+        colorprimary,
+        navtheme
+
       }
     }
 }

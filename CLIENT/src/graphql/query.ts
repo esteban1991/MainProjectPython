@@ -1,5 +1,18 @@
 import { gql } from '@apollo/client';
 
+// ME query to get data of current user
+export const ME = gql`
+  query me {
+      id
+      username
+      email
+      navtheme
+      colorprimary
+      companyname      
+    }
+`;
+
+
 // USERS query to get all users
 export const USERS = gql`
   query getUsers {
@@ -7,14 +20,14 @@ export const USERS = gql`
       id
       username
       email
-      confirmed
-      blocked
-      role {
-        name
-      }
-      profpic {
-        url
-      }
+      // confirmed
+      // blocked
+      // role {
+      //   name
+      // }
+      // profpic {
+      //   url
+      // }
     }
   }
 `;
@@ -24,23 +37,23 @@ export const USER = gql`
   query User($id: ID!) {
     user(id: $id) {
       id
-      createdAt
-      updatedAt
+      // createdAt
+      // updatedAt
       username
       email
-      provider
-      confirmed
-      blocked
-      role {
-        name
-      }
-      profpic {
-        name
-        alternativeText
-        url
-        previewUrl
-        provider
-      }
+      // provider
+      // confirmed
+      // blocked
+      // role {
+      //   name
+      // }
+      // profpic {
+      //   name
+      //   alternativeText
+      //   url
+      //   previewUrl
+      //   provider
+      // }
     }
   }
 `;

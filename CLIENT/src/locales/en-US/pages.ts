@@ -1,14 +1,16 @@
 export default {
   'pages.layouts.userLayout.title':
     'Core Client is an ideal platform for the Business Intelligence of your company... ',
-  'pages.login.accountLogin.tab': 'Login',
-  'pages.login.accountLogin.errorMessage': 'Incorrect username/password(admin/ant.design)',
+  'pages.login.Login.tab': 'Login',
+  'pages.login.failureCredentials': 'Login failed: Invalid Credentials!',
+  'pages.login.failureServer': 'Login failed: Not Conected with Server!',
   'pages.login.failure': 'Login failed, please try again!',
   'pages.login.success': 'Login successful!',
   'pages.login.username.placeholder': 'Username: admin or user',
   'pages.login.username.required': 'Please input your username!',
   'pages.login.password.placeholder': 'Password: ant.design',
   'pages.login.password.required': 'Please input your password!',
+  'pages.login.Register.tab': 'Register',  
   'pages.login.phoneLogin.tab': 'Create Account',
   'pages.login.phoneLogin.errorMessage': 'Verification Code Error',
   'pages.login.phoneNumber.placeholder': 'Phone Number',

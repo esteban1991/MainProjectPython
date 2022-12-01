@@ -197,14 +197,12 @@ const Login: React.FC = () => {
                 key: 'account',
                 label: intl.formatMessage({
                   id: 'pages.login.accountLogin.tab',
-                  defaultMessage: 'Inicio de sesión de contraseña de cuenta',
                 }),
               },
               {
                 key: 'mobile',
                 label: intl.formatMessage({
                   id: 'pages.login.phoneLogin.tab',
-                  defaultMessage: 'Inicio de sesión de número de móvil',
                 }),
               },
             ]}
@@ -214,7 +212,6 @@ const Login: React.FC = () => {
             <LoginMessage
               content={intl.formatMessage({
                 id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: 'Cuenta o contraseña incorrectas',
               })}
             />
           )}
@@ -229,7 +226,6 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.username.placeholder',
-                  defaultMessage: 'nombre de usuario:',
                 })}
                 rules={[
                   {
@@ -237,7 +233,6 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.username.required"
-                        defaultMessage="por favor ingrese el nombre de usuario!"
                       />
                     ),
                   },
@@ -251,7 +246,6 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.password.placeholder',
-                  defaultMessage: 'clave: ant.design',
                 })}
                 rules={[
                   {
@@ -259,7 +253,6 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.password.required"
-                        defaultMessage="¡Por favor, introduzca su contraseña!"
                       />
                     ),
                   },
@@ -279,7 +272,6 @@ const Login: React.FC = () => {
                 name="mobile"
                 placeholder={intl.formatMessage({
                   id: 'pages.login.phoneNumber.placeholder',
-                  defaultMessage: 'Número de teléfono',
                 })}
                 rules={[
                   {
@@ -287,7 +279,6 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.phoneNumber.required"
-                        defaultMessage="¡Por favor ingrese el número de teléfono!"
                       />
                     ),
                   },
@@ -296,7 +287,6 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.phoneNumber.invalid"
-                        defaultMessage="¡Número de teléfono mal formado!"
                       />
                     ),
                   },
@@ -312,18 +302,15 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.captcha.placeholder',
-                  defaultMessage: 'por favor ingrese el código de verificación',
                 })}
                 captchaTextRender={(timing, count) => {
                   if (timing) {
                     return `${count} ${intl.formatMessage({
                       id: 'pages.getCaptchaSecondText',
-                      defaultMessage: 'obtener código de verificación',
                     })}`;
                   }
                   return intl.formatMessage({
                     id: 'pages.login.phoneLogin.getVerificationCode',
-                    defaultMessage: 'obtener código de verificación',
                   });
                 }}
                 name="captcha"
@@ -333,7 +320,6 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.captcha.required"
-                        defaultMessage="por favor ingrese el código de verificación!"
                       />
                     ),
                   },
@@ -356,14 +342,14 @@ const Login: React.FC = () => {
             }}
           >
             <ProFormCheckbox noStyle name="autoLogin">
-              <FormattedMessage id="pages.login.rememberMe" defaultMessage="inicio de sesión automático" />
+              <FormattedMessage id="pages.login.rememberMe" />
             </ProFormCheckbox>
             <a
               style={{
                 float: 'right',
               }}
             >
-              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="Se te olvidó tu contraseña" />
+              <FormattedMessage id="pages.login.forgotPassword"  />
             </a>
           </div>
         </LoginForm>

@@ -2,7 +2,7 @@ import Footer from '@/components/Footer';
 // import { login } from '@/services/ant-design-pro/api';
 // import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import { PageContainer, Settings as LayoutSettings,ProForm, ProFormUploadButton, ProFormGroup} from '@ant-design/pro-components';
-import defaultSettings from '../config/defaultSettings';
+import defaultSettings from '../../../../config/defaultSettings';
 import {
   // AlipayCircleOutlined,
   LockOutlined,
@@ -34,6 +34,7 @@ import { LOGIN , REGISTER} from '@/graphql/mutation'; // <- Do not forget to imp
 
 // Import useMutation hook from Apollo Client
 import { gql, useMutation } from '@apollo/client';
+import { stubFalse } from 'lodash';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -73,17 +74,19 @@ const Login: React.FC = () => {
   const [loginUser] = useMutation(LOGIN);
   const [registerUser] = useMutation(REGISTER);
 
-  // if (!initialState || !initialState.settings) {
-  //   return null;
-  // }
 
-  // const { navTheme, layout } = initialState.settings;
-  // let className = styles.dark;
 
-  // if ((navTheme === 'realDark' && layout === 'top') || layout === 'mix') {
-  //   className =  `${styles.dark}`;
-  //   //console.log(navTheme)
-  // }
+  if (!initialState || !initialState.settings) {
+     return null;
+  }
+
+  const { navTheme, layout } = initialState.settings;
+  let className = styles.dark;
+
+  if ((navTheme === 'realDark' && layout === 'top') || layout === 'mix') {
+     className =  `${styles.dark}`;
+     //console.log(navTheme)
+  }
 
   const [fileList, setFileList] = useState<UploadFile[]>([
     // {
@@ -127,6 +130,9 @@ const Login: React.FC = () => {
     }
   };
 
+
+  
+
   const handleSubmitLogin = async (values: API.LoginParams) => {
     setSubmitting(true);
       try {
@@ -135,7 +141,6 @@ const Login: React.FC = () => {
         // if (msg.status === 'ok') {
         //   const defaultLoginSuccessMessage = intl.formatMessage({
         //     id: 'pages.login.success',
-        //     defaultMessage: '¡Inicio de sesión correcto!',
         //   });
         //   message.success(defaultLoginSuccessMessage);
         //   await fetchUserInfo();
@@ -147,23 +152,43 @@ const Login: React.FC = () => {
 
         localStorage.clear();
 
+        // format variables if email or not
+        const re = /\S+@\S+\.\S+/;
+        //const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const varlog =  re.test(String(values.username).toLowerCase()) === true ? 
+          {
+            email:  values.username,
+            password:values.password,
+
+          } :
+          {
+            username: values.username,
+            password:values.password,
+
+          }
+
         // Login
         const { data, errors } = await loginUser({
-          variables: {
-            password:values.password,
-            username:values.username,
-          },
+          variables: varlog,
         });
 
         // Store data to local storage unless an error occurs
-        if (!errors) {
+        if (!errors && data.login.success ) {
+          const defaultLoginSuccessMessage = intl.formatMessage({
+             id: 'pages.login.success',
+          });          
+          message.success(defaultLoginSuccessMessage);
+
+
+
           localStorage.setItem('token', data.login.token);
           localStorage.setItem('id', data.login.user.id);
           localStorage.setItem('username', data.login.user.username);
           localStorage.setItem('email', data.login.user.email);
           localStorage.setItem('company', data.login.user.companyname);
-          localStorage.setItem('confirmed', data.login.user.confirmed);
-          //localStorage.setItem('blocked', data.login.user.blocked);
+          localStorage.setItem('colorprimary', data.login.user.colorprimary);
+          localStorage.setItem('navtheme', data.login.user.navtheme);
+
           //localStorage.setItem('role-id', data.login.user.role.id);
           //localStorage.setItem('role-name', data.login.user.role.name);
           //localStorage.setItem('role-description', data.login.user.role.description);
@@ -176,18 +201,28 @@ const Login: React.FC = () => {
           console.info('After push, you are on :', location.pathname);
           return;
         } else {
+
+          const defaultLoginFailureCredentials = intl.formatMessage({
+            id: 'pages.login.failureCredentials',
+          });
+
+          const defaultLoginFailureServer = intl.formatMessage({
+            id: 'pages.login.failureServer',
+          });          
+  
+          message.error(errors ? defaultLoginFailureServer : defaultLoginFailureCredentials );
+          
           console.error('An Apollo client error happened :', errors);
         }
         // Si falla, establezca el mensaje de error del usuario
-        setUserLoginState(msg);
+        //setUserLoginState(msg);
         console.log(errors)
       } catch (error) {
         const defaultLoginFailureMessage = intl.formatMessage({
-          id: 'pages.login.failure',
-          defaultMessage: 'Acceso fallido. Por favor intente nuevamente！',
+          id: 'pages.login.failureServer',
         });
         console.log(error);
-        message.error(defaultLoginFailureMessage);
+        message.error(defaultLoginFailureMessage + error);
       }
   };
 
@@ -234,7 +269,7 @@ const Login: React.FC = () => {
       </div>
       <div className={styles.content}>
         <LoginForm
-          logo={<img alt="logo" src="/logo.svg" />}
+          logo={<img alt="logo" src="/logoClient.svg" />}
           title="Core Client"
           subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
           initialValues={{
@@ -253,10 +288,10 @@ const Login: React.FC = () => {
             // <TwitterOutlined key="TwitterOutlined" className={styles.icon} />,
             // <InstagramOutlined key="InstagramOutlined" className={styles.icon} />,
           ]):''}
-          onFinish={type === 'account'?async (values: API.LoginParams) => {
+          onFinish={type === 'account'? async (values: API.LoginParams) => {
             await handleSubmitLogin(values as API.LoginParams);
-          }:async (values: API.UserParams) => {
-            await handleSubmitUser(values as API.UserParams);
+          }:async (values: API.RegisterParams) => {
+            await handleSubmitRegister(values as API.RegisterParams);
           }}
         >
           <Tabs
@@ -267,15 +302,13 @@ const Login: React.FC = () => {
               {
                 key: 'account',
                 label: intl.formatMessage({
-                  id: 'pages.login.accountLogin.tab',
-                  defaultMessage: 'Inicio de sesión de contraseña de cuenta',
+                  id: 'pages.login.Login.tab',
                 }),
               },
               {
                 key: 'create',
                 label: intl.formatMessage({
-                  id: 'pages.login.phoneLogin.tab',
-                  defaultMessage: 'Crear cuenta',
+                  id: 'pages.login.Register.tab',
                 }),
               },
             ]}
@@ -377,16 +410,10 @@ const Login: React.FC = () => {
                 <ProFormText
                   width="md"
                   name="username"
-                  //label="Nombre"
-                  tooltip="Nombre de Usuario"
-                  placeholder="Usuario"
                 />
                 <ProFormText
                   width="md"
                   name="email"
-                  //label="company"
-                  tooltip="Correo"
-                  placeholder="Correo"
                 />
                 </Col>
               </Row>
@@ -394,7 +421,6 @@ const Login: React.FC = () => {
                 <Col span={12}>
                 <ProFormText.Password
                   name="password1"
-                  placeholder="Contraseña"
                   rules={[
                     {
                       required: true,
