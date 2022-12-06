@@ -169,7 +169,8 @@ GRAPHQL_JWT = {
 GRAPHQL_AUTH = {
     'LOGIN_ALLOWED_FIELDS': ['email', 'username'],
     'UPDATE_MUTATION_FIELDS': ["first_name", "last_name", "companyname", "navtheme", "colorprimary"],    
-    'EMAIL_FROM': 'gisycu@gmail.com'
+    'EMAIL_FROM': 'devhj2000@gmail.com',
+    'ALLOW_LOGIN_NOT_VERIFIED' : False
 }
 
 SOCIAL_AUTH_PIPELINE = [
@@ -223,34 +224,25 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
 # SOCIAL_AUTH_GOOGLE_OAUTH2_KEY =  env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', default='')
 # SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET =  env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', default='')
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-""" DEFAULT_FROM_EMAIL = 'gisycu@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = '*' #my gmail password
-EMAIL_HOST_USER = 'gisycu@gmail.com' #my gmail username
-EMAIL_PORT = 25 """
+EMAIL_HOST_USER = 'devhj2000@gmail.com' #my gmail username
+EMAIL_HOST_PASSWORD = 'mafyborkvaufvkyn' #my gmail password
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+# DEFAULT_FROM_EMAIL = EMAIL_HOST
 
-# SMTP Server
-MAIL_HOST = os.environ.get('smtp.gmail.com')
-# SMTP Port. Default 25.
-# 25 = SMTP
-# 465 = SMTPS
-# 587 = Submission
-MAIL_PORT = 587
-
-# SMTP User
-MAIL_HOST_USER = 'gisycu@gmail.com'
-# SMTP User Password.
-MAIL_HOST_PASSWORD = '*'
-# STARTTLS.
-MAIL_USE_TLS = True
-MAIL_ATTACHMENT_IMAGES = []
-# FROM
-FROM_EMAIL = 'gisycu@gmail.com'
-SUPPORT_EMAIL = 'gisycu@gmail.com'
-
-
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_SSL = True
+# EMAIL_HOST = 'mailu.konbex.com'
+# EMAIL_HOST_USER = 'no-reply@konbex.com'
+# EMAIL_HOST_USER_ACCOUNT = 'Konbex' + '<'+EMAIL_HOST_USER+'>'
+# EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+# EMAIL_PORT = '465'
+# EMAIL_SUBJECT_PREFIX = '[Konbex]'
+# DEFAULT_FROM_EMAIL = EMAIL_HOST
