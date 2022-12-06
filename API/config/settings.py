@@ -72,7 +72,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -84,6 +84,9 @@ TEMPLATES = [
         },
     }
 ]
+
+
+
 
 WSGI_APPLICATION = "config.wsgi.application"
 
@@ -171,6 +174,9 @@ GRAPHQL_AUTH = {
     'REGISTER_MUTATION_FIELDS' : ["email", "username", "country", "phone"],    
     'UPDATE_MUTATION_FIELDS': ["first_name", "last_name", "companyname", "navtheme", "colorprimary"],    
     'EMAIL_FROM': 'devhj2000@gmail.com',
+    "EMAIL_TEMPLATE_VARIABLES": {
+        "frontend_domain": "localhost:8001"
+    },
     'ALLOW_LOGIN_NOT_VERIFIED' : False
 }
 
