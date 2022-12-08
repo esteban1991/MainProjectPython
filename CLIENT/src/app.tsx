@@ -20,6 +20,8 @@ import Swal from 'sweetalert2';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+const activatePath = '/activate';
+const passwordresetPath = '/password-reset';
 
 // /** 获取用户信息比较慢的时候会展示一个 loading */
 // export const initialStateConfig = {
@@ -65,9 +67,16 @@ export async function getInitialState(): Promise<{
       history.push(loginPath);
     }
     return undefined;
+  
   };
-  // 如果不是登录页面，执行
-  if (window.location.pathname !== loginPath) {
+  
+  console.log(window.location.pathname.substring(0,9));
+  console.log(activatePath);
+  console.log(window.location.pathname.substring(0,15));
+  console.log(passwordresetPath);
+
+  if ((window.location.pathname !== loginPath) &&  (window.location.pathname.substring(0,9) !== activatePath) && 
+  (window.location.pathname.substring(0,15) !== passwordresetPath)) {
     const currentUser = await fetchUserInfo();
 
     return {
@@ -119,7 +128,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
           history.push('/');
         }
       } else {
-        if (token != null) {
+        if ((token != null) && (location.pathname.substring(0,9) !== activatePath) && 
+        (location.pathname.substring(0,15) !== passwordresetPath))
+        {
+          console.log("mas dentro");
+          console.log(location.pathname);
           let decoded: JwtPayload;
 
           // Handle a token which is created intentionally (Invalid JWT)
@@ -168,8 +181,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         } else {
           console.log('You have not logged in, Login first!');
 
-          // Ask users to login first before visitng other pages
-          history.push(loginPath);
+          // Ask users to login first before visitng other 
+          if ((location.pathname.substring(0,9) !== activatePath)  && 
+          (location.pathname.substring(0,15) !== passwordresetPath)) {
+            history.push(loginPath);
+          }
         }
       }
     },
@@ -216,7 +232,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       return (
         <>
           {children}
-          {!props.location?.pathname?.includes('/login') && (
+          {!props.location?.pathname?.includes('/login') && 
+          !props.location?.pathname?.includes('/activate') && 
+          (
             <SettingDrawer
               disableUrlParams
               // enableDarkTheme={false}

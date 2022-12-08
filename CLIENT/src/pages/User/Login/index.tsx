@@ -30,11 +30,14 @@ import { flushSync } from 'react-dom';
 import styles from './index.less';
 
 // Import GraphQL LOGIN mutation
-import { LOGIN , REGISTER} from '@/graphql/mutation'; // <- Do not forget to import inside brackets {}
+import { LOGIN , REGISTER, SENDPASSRESETEMAIL} from '@/graphql/mutation'; // <- Do not forget to import inside brackets {}
 
 // Import useMutation hook from Apollo Client
 import { gql, useMutation } from '@apollo/client';
 import { stubFalse } from 'lodash';
+
+import { Form} from 'antd';
+
 
 const LoginMessage: React.FC<{
   content: string;
@@ -65,6 +68,9 @@ const LoginMessage: React.FC<{
   }, 10);
 };
 
+
+
+
 const Login: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
@@ -73,8 +79,9 @@ const Login: React.FC = () => {
 
   const [loginUser] = useMutation(LOGIN);
   const [registerUser] = useMutation(REGISTER);
+  const [sendpasswordresetemailUser] = useMutation(SENDPASSRESETEMAIL);
 
-
+  const [form] = Form.useForm();
 
   if (!initialState || !initialState.settings) {
      return null;
@@ -131,7 +138,58 @@ const Login: React.FC = () => {
   };
 
 
+  const handleForgetPassword = async () => {
+      
+      try {
+        const values =  form.getFieldsValue();
+        const defaultSendPasswordRestEmailSendingMessage = intl.formatMessage({
+          id: 'pages.sendPasswordResetEmail.sending',
+       }); 
+        message.success(defaultSendPasswordRestEmailSendingMessage + values.username);
+        // Send Password Reset Email
+        const { data, errors } = await sendpasswordresetemailUser ({
+          variables:           
+          {
+            email: values.username,
+          },
+        });
+
+        // Store data to local storage unless an error occurs
+        if (!errors && data.sendPasswordResetEmail.success ) {
+          const defaultSendPasswordRestEmailSuccessMessage = intl.formatMessage({
+             id: 'pages.sendPasswordResetEmail.success',
+          });          
+          message.success(defaultSendPasswordRestEmailSuccessMessage);
+          return;
+        } else {
+
+          const listerror = data.sendPasswordResetEmail.errors.nonFieldErrors || 
+                            data.sendPasswordResetEmail.errors.email;
+          const msgerror = listerror && listerror[0].code; 
   
+          const defaultSendPasswordResetEmailFailure = intl.formatMessage({
+            id: msgerror === 'invalid' ? 'pages.sendPasswordResetEmail.invalid' : 
+                msgerror === 'email_fail' ? 'pages.sendPasswordResetEmail.email_fail' :
+                'pages.sendPasswordResetEmail.not_verified'  ,
+          });
+
+          const defaultSendPasswordResetEmailFailureServer = intl.formatMessage({
+            id: 'pages.sendPasswordResetEmail.failureServer',
+          });          
+ 
+          message.error(defaultSendPasswordResetEmailFailure.length > 0 ? 
+            defaultSendPasswordResetEmailFailure :
+            defaultSendPasswordResetEmailFailureServer );
+        }
+
+      } catch (error) {
+        const defaultSendPasswordResetEmailFailureServer = intl.formatMessage({
+          id: 'pages.sendPasswordResetEmail.failureServer',
+        });
+        message.error(defaultSendPasswordResetEmailFailureServer +  error);
+      }
+  };
+
 
   const handleSubmitLogin = async (values: API.LoginParams) => {
     setSubmitting(true);
@@ -259,6 +317,8 @@ const Login: React.FC = () => {
       }
 
   };
+
+
   const { status, type: loginType } = userLoginState;
 
   return (
@@ -269,6 +329,7 @@ const Login: React.FC = () => {
       </div>
       <div className={styles.content}>
         <LoginForm
+          form={form}
           logo={<img alt="logo" src="/logoClient.svg" />}
           title="Core Client"
           subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
@@ -378,15 +439,17 @@ const Login: React.FC = () => {
                   style={{
                     float: 'right',
                   }}
+                  onClick= {async () => await handleForgetPassword()}
                 >
                   <FormattedMessage id="pages.login.forgotPassword" />
+                  
                 </a>
               </div>
             </>
 
           )}
 
-          {status === 'error' && loginType === 'create' && <LoginMessage content="Error de código de verificación" />}
+          {status === 'error' && loginType === 'create' && <LoginMessage content="Error de código de verificación" type={''} />}
           {type === 'create' && (
             <>
               {/* Create account here */}

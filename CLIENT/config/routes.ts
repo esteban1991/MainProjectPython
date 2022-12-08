@@ -23,8 +23,21 @@ export default [
         path: '/user/settings',
         component: './User/Settings',
       },
+    
     ],
   },
+  {
+    name: 'activate',
+    path: '/activate/*',
+    component: './User/Activate',
+    hideInMenu: true, 
+  },   
+  {
+    name: 'passwordReset',
+    path: '/password-reset/*',
+    component: './User/PasswordReset',
+    hideInMenu: true, 
+  },     
   {
     path: '/welcome',
     name: 'welcome',

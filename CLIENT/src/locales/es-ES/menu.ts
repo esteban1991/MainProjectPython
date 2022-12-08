@@ -7,6 +7,8 @@ export default {
   'menu.login': 'Autentificar',
   'menu.register': 'Registrar',
   'menu.register-result': 'Resultado Registro',
+  'menu.activate': 'Activar',
+  'menu.passwordReset': 'Cambiar Contraseña',   
   'menu.dashboard': 'Panel de Control',
   'menu.dashboard.analysis': 'Analisis',
   'menu.dashboard.monitor': 'Monitor',

@@ -68,6 +68,11 @@ declare namespace API {
     type?: string;
   };
 
+  type ResetPasswordParams = {
+    password1?: string;
+    password2?: string;
+  };  
+
   type RegisterParams = {
     username?: string;
     password1?: string;

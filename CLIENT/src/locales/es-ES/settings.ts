@@ -37,7 +37,7 @@ export default {
   'app.settings.security.mfa-description':
     'Desconecte dispositivo MFA, luego enlacelo, puede ser confirmado dos veces',
   'app.settings.security.modify': 'Modificar',
-  'app.settings.security.set': 'Establcer',
+  'app.settings.security.set': 'Establecer',
   'app.settings.security.bind': 'Enlazar',
   'app.settings.binding.taobao': 'Enlazando Taobao',
   'app.settings.binding.taobao-description': 'Cuenta Taobao no está enlazada',
