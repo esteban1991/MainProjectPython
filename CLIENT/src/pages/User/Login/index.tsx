@@ -145,7 +145,7 @@ const Login: React.FC = () => {
         const defaultSendPasswordRestEmailSendingMessage = intl.formatMessage({
           id: 'pages.sendPasswordResetEmail.sending',
        }); 
-        message.success(defaultSendPasswordRestEmailSendingMessage + values.username);
+        message.info(defaultSendPasswordRestEmailSendingMessage + values.username);
         // Send Password Reset Email
         const { data, errors } = await sendpasswordresetemailUser ({
           variables:           

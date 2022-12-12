@@ -38,6 +38,8 @@ export default {
   'pages.sendPasswordResetEmail.email_fail': 'Envío de Correo para Cambiar Contraseña falló: Error al enviar de correo!',
   'pages.sendPasswordResetEmail.not_verified': 'Envío de Correo para Cambiar Contraseña falló: Active su cuenta. Un nuevo correo de activación ha sido enviado. Revise su correo!',
   'pages.passwordReset.title': 'Cambiar Contraseña',
+  'pages.passwordReset.submit': 'Enviar',  
+  'pages.passwordReset.reset': 'Inicializar',   
   'pages.passwordReset.password1.placeholder': 'Contraseña',
   'pages.passwordReset.password2.placeholder': 'Confirmar Contraseña',  
   'pages.passwordReset.password1.required': 'Por favor, introduzca su contraseña!',   

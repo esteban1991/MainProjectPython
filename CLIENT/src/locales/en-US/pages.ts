@@ -38,6 +38,8 @@ export default {
   'pages.sendPasswordResetEmail.email_fail': 'Send Password Reset Email failed: Failed to send email!',
   'pages.sendPasswordResetEmail.not_verified': 'Send Password Reset Email failed: Verify your account. A new verification email was sent.!',
   'pages.passwordReset.title': 'Reset Password',
+  'pages.passwordReset.submit': 'Submit',  
+  'pages.passwordReset.reset': 'Reset',  
   'pages.passwordReset.password1.placeholder': 'Password',
   'pages.passwordReset.password2.placeholder': 'Confirm Password', 
   'pages.passwordReset.password1.required': 'Please input your password!',   

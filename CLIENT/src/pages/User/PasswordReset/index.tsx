@@ -15,7 +15,7 @@ import {PASSWORDRESET} from '@/graphql/mutation'; // <- Do not forget to import 
 import {  useMutation } from '@apollo/client';
 import { history, useIntl, useModel } from '@umijs/max';
 import { useRef } from 'react';
-import { LockOutlined } from '@ant-design/icons';
+import { LockOutlined, UnlockTwoTone } from '@ant-design/icons';
 
 const PasswordReset: React.FC = () => {
 
@@ -133,6 +133,7 @@ const [confirmLoading, setConfirmLoading] = useState(false);
         title={intl.formatMessage({id:'pages.passwordReset.title' })}
         centered
         closable
+        maskClosable = {false}
         width={300}
         open={open}
         //onOk={handleOk}
@@ -150,6 +151,18 @@ const [confirmLoading, setConfirmLoading] = useState(false);
           layout = "vertical"
           size = "small"
           autoFocusFirstInput
+          submitter={{
+            // Configure the button text
+            searchConfig: {
+              submitText: intl.formatMessage({id:'pages.passwordReset.submit'}),              
+              resetText:  intl.formatMessage({id:'pages.passwordReset.reset'}),
+
+              
+            },
+
+            submitButtonProps: {},
+        
+          }}          
         >
 
           <ProForm.Group>
@@ -158,7 +171,7 @@ const [confirmLoading, setConfirmLoading] = useState(false);
               placeholder={intl.formatMessage({id:'pages.passwordReset.password1.placeholder' })}
               fieldProps={{
                 //size: 'medium',
-                prefix: <LockOutlined className={'prefixIcon'} />,
+                prefix: <UnlockTwoTone className={'prefixIcon'} />,
               }}
               rules={[
                 {
@@ -172,7 +185,7 @@ const [confirmLoading, setConfirmLoading] = useState(false);
               placeholder={intl.formatMessage({ id: 'pages.passwordReset.password2.placeholder' })}
               fieldProps={{
                 //size: 'medium',
-                prefix: <LockOutlined className={'prefixIcon'} />,
+                prefix: <UnlockTwoTone className={'prefixIcon'} />,
               }}
               rules={[
                 {
@@ -184,6 +197,8 @@ const [confirmLoading, setConfirmLoading] = useState(false);
 
             
           </ProForm.Group>
+
+          
         </ProForm>
 
       </Modal>
