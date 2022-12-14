@@ -9,16 +9,12 @@
 #  file that was distributed with this source code.                
 #
 
-
-
 from django.contrib import admin
-from django.urls import path
-from django.views.decorators.csrf import csrf_exempt
-
-from graphene_django.views import GraphQLView
+from .models import Kpi
 
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
-]
+# class KpiAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'name', 'description','value','date')
+
+
+# admin.site.register(Kpi, KpiAdmin)

@@ -1,0 +1,7 @@
+# Local development dependencies go here
+# ------------------------------------------------
+-r base.txt
+
+# Django debug toolbar
+django-debug-toolbar==3.8.1
+

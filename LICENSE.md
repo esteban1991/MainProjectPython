@@ -1,15 +1,15 @@
 # End-User License Agreement (EULA) of Core
 
-This End-User License Agreement ("EULA") is a legal agreement between you and Outboss. Our EULA was created by EULA
-Template for Abacoos.
+This End-User License Agreement ("EULA") is a legal agreement between you and QvaLT. Our EULA was created by EULA
+Template for Core.
 
-This EULA agreement governs your acquisition and use of our Abacoos software ("Software") directly from Outboss or
-indirectly through Outboss authorized reseller or distributor (a "Reseller").
+This EULA agreement governs your acquisition and use of our Core software ("Software") directly from QvaLT or
+indirectly through QvaLT authorized reseller or distributor (a "Reseller").
 
 Please read this EULA agreement carefully before completing the installation process and using the Abacoos software. It
-provides a license to use the Abacoos software and contains warranty information and liability disclaimers.
+provides a license to use the Core software and contains warranty information and liability disclaimers.
 
-If you register for a free trial of the Abacoos software, this EULA agreement will also govern that trial. By clicking "
+If you register for a free trial of the Core software, this EULA agreement will also govern that trial. By clicking "
 accept" or installing and/or using the Abacoos software, you are confirming your acceptance of the Software and agreeing
 to become bound by the terms of this EULA agreement.
 
@@ -18,17 +18,17 @@ the authority to bind such entity and its affiliates to these terms and conditio
 if you do not agree with the terms and conditions of this EULA agreement, do not install or use the Software, and you
 must not accept this EULA agreement.
 
-This EULA agreement shall apply only to the Software supplied by Outboss herewith regardless of whether other software
-is referred to or described herein. The terms also apply to any Outboss updates, supplements, Internet-based services,
+This EULA agreement shall apply only to the Software supplied by QvaLT herewith regardless of whether other software
+is referred to or described herein. The terms also apply to any QvaLT updates, supplements, Internet-based services,
 and support services for the Software, unless other terms accompany those items on delivery. If so, those terms apply.
 
 ## License Grant
 
-Outboss hereby grants you a personal, non-transferable, non-exclusive licence to use the Abacoos software on your devices
+QvaLT hereby grants you a personal, non-transferable, non-exclusive licence to use the Core software on your devices
 in accordance with the terms of this EULA agreement.
 
-You are permitted to load the Abacoos software (for example a PC, laptop, mobile or tablet) under your control. You are
-responsible for ensuring your device meets the minimum requirements of the Abacoos software.
+You are permitted to load the Core software (for example a PC, laptop, mobile or tablet) under your control. You are
+responsible for ensuring your device meets the minimum requirements of the Core software.
 
 You are not permitted to:
 
@@ -42,11 +42,11 @@ You are not permitted to:
 
 ## Intellectual Property and Ownership
 
-Outboss shall at all times retain ownership of the Software as originally downloaded by you and all subsequent downloads
+QvaLT shall at all times retain ownership of the Software as originally downloaded by you and all subsequent downloads
 of the Software by you. The Software (and the copyright, and other intellectual property rights of whatever nature in
-the Software, including any modifications made thereto) are and shall remain the property of Outboss.
+the Software, including any modifications made thereto) are and shall remain the property of QvaLT.
 
-Outboss reserves the right to grant licences to use the Software to third parties.
+QvaLT reserves the right to grant licences to use the Software to third parties.
 
 ## Termination
 
